@@ -63,7 +63,7 @@ module Stamps
     # Include any errors in the response
     #
     def format_soap_faults
-      fault = self.hash.delete("soap:Fault") || self.hash.delete(:fault)
+      fault = self.hash[:fault]
       self.errors << (fault[:faultstring] || fault["faultstring"])
       self.valid = false
     end

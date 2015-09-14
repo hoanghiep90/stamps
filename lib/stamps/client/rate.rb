@@ -25,10 +25,10 @@ module Stamps
           :rate          => Stamps::Mapping::Rate.new(params)
         })
         response = request('GetRates', rates)
-        if response[:get_rates_response].nil?
+        if response.hash.try(:[], :get_rates_response).nil?
           response
         else
-          response[:get_rates_response][:rates].nil? ? [] : [response[:get_rates_response][:rates][:rate]].flatten
+          response.hash[:get_rates_response].try(:[], :rates).nil? ? [] : [response.hash[:get_rates_response][:rates][:rate]].flatten
         end
       end
 
@@ -40,4 +40,3 @@ module Stamps
     end
   end
 end
-

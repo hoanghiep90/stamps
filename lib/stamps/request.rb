@@ -13,8 +13,8 @@ module Stamps
         globals.endpoint self.endpoint
         globals.namespace self.namespace
         globals.namespaces("xmlns:tns" => self.namespace)
-        globals.log false
-        globals.logger Logger.new(STDOUT)
+        globals.log true
+        globals.logger Logger.new('logfile.log')
         globals.raise_errors false
         globals.headers({ "SoapAction" => formatted_soap_action(web_method) })
         globals.element_form_default :qualified
@@ -24,8 +24,7 @@ module Stamps
       end
 
       response = client.call(web_method, :message => params.to_hash)
-
-      Stamps::Response.new(response).to_hash
+      Stamps::Response.new(response)#.to_hash
     end
 
     # Get the Authenticator token. By using an Authenticator, the integration
@@ -47,8 +46,8 @@ module Stamps
             :password       => self.password
         })
       )
-      if response_hash[:authenticate_user_response] != nil
-        response_hash[:authenticate_user_response][:authenticator]
+      if response_hash.hash[:authenticate_user_response] != nil
+        response_hash.hash[:authenticate_user_response][:authenticator]
       else
         raise Stamps::InvalidIntegrationID.new(response_hash[:errors][0])
       end
