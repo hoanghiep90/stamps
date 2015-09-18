@@ -210,7 +210,6 @@ module Stamps
 
       # Maps :address to Address map
       def credentials=(val)
-        p val
         self[:Credentials] = Credentials.new(val)
       end
     end
