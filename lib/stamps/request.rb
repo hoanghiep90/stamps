@@ -12,15 +12,16 @@ module Stamps
       client = Savon.client do |globals|
         globals.endpoint self.endpoint
         globals.namespace self.namespace
-        globals.namespaces("xmlns:tns" => self.namespace)
-        globals.log true
-        globals.logger Logger.new('logfile.log')
+        globals.namespaces("xmlns:sws" => self.namespace)
+        globals.log false
+        globals.logger Logger.new(STDOUT)
         globals.raise_errors false
         globals.headers({ "SoapAction" => formatted_soap_action(web_method) })
         globals.element_form_default :qualified
-        globals.namespace_identifier :tns
+        globals.namespace_identifier :sws
         globals.open_timeout self.open_timeout
         globals.read_timeout self.read_timeout
+        globals.env_namespace :soapenv
       end
 
       response = client.call(web_method, :message => params.to_hash)

@@ -80,6 +80,7 @@ module Stamps
       property :RateCategory,            :from => :rate_category
       property :ToState,                 :from => :to_state
       property :CubicPricing,            :from => :cubic_pricing
+      property :DeliveryDate,            :from => :delivery_date
 
       # Maps :rate to AddOns map
       def add_ons=(addons)
@@ -148,7 +149,7 @@ module Stamps
 
       # Maps :to to Address map
       def to=(val)
-        self[:To] = Address.new(val)
+        self[:To] = Address.new(val[:address])
       end
 
       # Maps :rate to Rate map
@@ -202,10 +203,16 @@ module Stamps
     end
 
     class PurchasePostage < Hashie::Trash
-      property :Authenticator,  :from => :authenticator
-      property :IntegratorTxID, :from => :transaction_id
+      property :Credentials,    :from => :credentials
       property :PurchaseAmount, :from => :amount
       property :ControlTotal,   :from => :control_total
+      property :IntegratorTxID, :from => :transaction_id
+
+      # Maps :address to Address map
+      def credentials=(val)
+        p val
+        self[:Credentials] = Credentials.new(val)
+      end
     end
 
     class GetPurchaseStatus < Hashie::Trash
